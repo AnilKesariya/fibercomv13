@@ -1,0 +1,30 @@
+<odoo>
+<data>
+    <record id="ibas_sale_view_form" model="ir.ui.view">
+        <field name="name">sale.order.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="ibas_order_type" required="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name"/>
+                </xpath>
+            <!-- <xpath expr="//button[@name='action_draft']" position="after">
+                <button string="Mark Approved" name="mark_approved" type="object" class="oe_highlight"
+                attrs="{'invisible': ['|', ('ibas_order_type', '!=', 'MRF'),'|', ('name', 'like', 'Approved'), 
+                '|',('name', 'like', 'Issuance'), '|', ('name', 'like', 'Done')]}"/>
+                <button string="Mark Issuance" name="mark_issuance" type="object" class="oe_highlight" 
+                attrs="{'invisible': ['|',('ibas_order_type', '!=', 'MRF'),'|', ('name', 'like', 'Done'),'|',
+                ('name', 'like', 'Issuance')]}"/>
+                <button string="Mark Done" name="mark_done" type="object" class="oe_highlight" 
+                attrs="{'invisible': ['|',('ibas_order_type', '!=', 'MRF'),'|', ('name', 'like', 'Done'),'|',
+                ('name', 'like', 'Approved')]}"/>
+                <button string="Clear Markings" name="clear_marks" type="object" class="oe_highlight" attrs="{'invisible': [('ibas_order_type', '!=', 'MRF')]}"/>
+            </xpath> -->
+        </field>
+    </record>
+</data>
+</odoo>

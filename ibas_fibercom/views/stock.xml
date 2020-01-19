@@ -1,0 +1,21 @@
+<odoo>
+<data>
+    <record id="ibas_stock_picking_view_form" model="ir.ui.view">
+        <field name="name">stock.picking.view.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="requested_by" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                <field name="approved_by" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+              </xpath>
+
+            <xpath expr="//field[@name='location_id']" position="after">
+                <field name="subcon" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                <field name="project_code" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                <field name="project_area" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+            </xpath>
+        </field>
+    </record>
+</data>
+</odoo>

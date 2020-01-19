@@ -1,0 +1,26 @@
+<odoo>
+    <template id="report_delivery_slip" name="Delivery Slip" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[@name='div_sched_date']" position="after">
+             <div t-if="o.subcon" class="col-auto">
+                <strong>Subcon:</strong>
+                <p t-field="o.subcon"/>
+            </div>
+            <div t-if="o.requested_by" class="col-auto">
+                <strong>Requested By:</strong>
+                <p t-field="o.requested_by"/>
+            </div>
+            <div t-if="o.approved_by" class="col-auto">
+                <strong>Approved By:</strong>
+                <p t-field="o.approved_by"/>
+            </div>
+            <div t-if="o.project_code" class="col-auto">
+                <strong>Project Code:</strong>
+                <p t-field="o.project_code"/>
+            </div>
+            <div t-if="o.project_area" class="col-auto">
+                <strong>Project Area:</strong>
+                <p t-field="o.project_area"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>
