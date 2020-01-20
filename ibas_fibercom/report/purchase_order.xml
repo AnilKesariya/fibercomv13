@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <template id="ibas_boxed">
+        <div class="header">
+            <div class="o_boxed_header">
+            <div class="row mb8">
+                <div class="col-6">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                </div>
+                <div class="col-6 text-right mb4">
+                    <!-- <h4 class="mt0" t-field="company.report_header"/>
+                    <div name="company_address" class="mb4">
+                        <span class="company_address" t-field="company.partner_id"
+                            t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                    </div> -->
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_boxed" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer o_boxed_footer">
+            <div class="text-center">
+                <p style="text-align: center;">
+                    <em>Unit 2006-B, West Tower, Philippine Stock Exchange Centre,</em>
+                    <br />
+                    <em>Exchange Road, Ortigas Center, Pasig City</em>
+                    <br />
+                    <em>Tels.: (632) 657-1234 / 570-9668 / 635-0278 / 650-1302</em>
+                    <br />
+                    <em>Fax: (632) 637-6067</em>
+                    <br />
+                    <em>www.bamacomserv.com/ inquiry@bamacomserv.com</em>
+                </p>
+                <div t-field="company.report_footer"/>
+                <div t-if="report_type == 'pdf'">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="ibas_external_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-esc="company.update_scss()"/>
+
+        <t t-call="ibas_fibercom.ibas_boxed"><t t-raw="0"/></t>
+
+    </template>
+
+<template id="report_purchaseorder_subcon">
+    <t t-call="ibas_fibercom.ibas_external_layout">
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+       
+        <div class="page">
+            <div class="oe_structure"/>
+
+
+            <div class="row">
+                <div class="col-6">
+                    <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                    <p t-if="o.partner_id.vat">
+                        <t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>:                        
+                        <span t-field="o.partner_id.vat"/>
+                    </p>
+                </div>
+
+                <div class="col-6">
+                    <p t-field="o.date_order" style="text-align: right;" t-options='{"format": "dd, MMMM yyyy"}'/>
+                </div>
+            </div>
+            
+        
+
+            <h3 style="text-align: center;" t-if="o.state == 'draft'">Request for Quotation #<span t-field="o.name"/></h3>
+            <h3 style="text-align: center;" t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h3>
+            <h3 style="text-align: center;" t-if="o.state in ['purchase', 'done']">Purchase Order #<span t-field="o.name"/></h3>
+            <h3 style="text-align: center;" t-if="o.state == 'cancel'">Cancelled Purchase Order #<span t-field="o.name"/></h3>
+
+            <!-- <div id="informations" class="row mt32 mb32">
+                <div t-if="o.user_id" class="col-3 bm-2">
+                    <strong>Purchase Representative:</strong>
+                    <p t-field="o.user_id" class="m-0"/>
+                </div>
+                <div t-if="o.partner_ref" class="col-3 bm-2">
+                    <strong>Your Order Reference:</strong>
+                    <p t-field="o.partner_ref" class="m-0"/>
+                </div>
+                <div t-if="o.date_order" class="col-3 bm-2">
+                    <strong>Order Date:</strong>
+                    <p t-field="o.date_order" class="m-0"/>
+                </div>
+            </div> -->
+
+            <table class="table table-sm o_main_table">
+                <thead>
+                    <tr>
+                        <th><strong>Description</strong></th>
+                        <th><strong>Taxes</strong></th>
+                        <!-- <th class="text-center"><strong>Date Req.</strong></th> -->
+                        <th class="text-right"><strong>Qty</strong></th>
+                        <th class="text-right"><strong>Unit Price</strong></th>
+                        <th class="text-right"><strong>Amount</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="o.order_line" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                        <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <t t-if="not line.display_type">
+                                <td id="product">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="', '.join(map(lambda x: x.name, line.taxes_id))"/>
+                                </td>
+                                <!-- <td class="text-center">
+                                    <span t-field="line.date_planned"/>
+                                </td> -->
+                                <td class="text-right">
+                                    <span t-field="line.product_qty"/>
+                                    <span t-field="line.product_uom.name" groups="uom.group_uom"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="line.price_unit"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="line.price_subtotal"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </td>
+                            </t>
+                            <t t-if="line.display_type == 'line_section'">
+                                <td colspan="99" id="section">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="line.display_type == 'line_note'">
+                                <td colspan="99" id="note">
+                                    <span t-field="line.name"/>
+                                </td>
+                            </t>
+                        </tr>
+                        <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section')">
+                            <tr class="is-subtotal text-right">
+                                <td colspan="99" id="subtotal">
+                                    <strong class="mr16">Subtotal</strong>
+                                    <span
+                                        t-esc="current_subtotal"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                    />
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </tbody>
+            </table>
+
+            <div id="total" class="row justify-content-end">
+                <div class="col-4">
+                    <table class="table table-sm">
+                        <tr class="border-black">
+                            <td><strong>Subtotal</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Taxes</td>
+                            <td class="text-right">
+                                <span t-field="o.amount_tax"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr class="border-black o_total">
+                            <td><strong>Total</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_total"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <p t-field="o.notes"/>
+
+            <br/><br/><br/>
+
+                        <table border="0" class="table table-sm o_main_table" style="width: 80%; border-collapse: collapse; border-style: none; margin-left: auto; margin-right: auto;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                        <p>Prepared By:</p>
+                                        <p>
+                                            <br />
+                                            <strong>Reigie Christian Rosales</strong>
+                                            <br />
+            Logistics Assistant</p>
+                                    </td>
+                                    <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                        <p>Requested By:<br />
+                                        <br />
+                                        <br />
+            ________________________________</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                    <p></p>
+                                    <p>Approved By:</p>
+                                    <p>
+                                        <br />
+                                        <strong>Ma. Carmela Santos</strong>
+                                        <br />
+            COO</p>
+                                </td>
+                                <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">Noted By:<br />
+                                <br />
+                                <br />
+            _________________________________</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            <div class="oe_structure"/>
+        </div>
+    </t>
+</template>
+
+<template id="report_purchaseorder">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="ibas_fibercom.report_purchaseorder_subcon" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+<report
+    id="action_report_purchase_order"
+    model="purchase.order"
+    string="PO- Subcon"
+    report_type="qweb-pdf"
+    name="ibas_fibercom.report_purchaseorder"
+    file="ibas_fibercom.report_purchaseorder"
+/>
+
+
+</odoo>
