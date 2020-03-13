@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- New access group for inventory user -->
+        <record id="group_fcom_sale_engineer" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="name">Sales Engineer</field>
+        </record>
+
+        <record id="group_fcom_purchase_engineer" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="name">Purchase Engineer</field>
+        </record>
+
+        <record model="ir.rule" id="access_mrf_orders_rule">
+            <field name="name">Engineer: Access MRF Orders</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="global" eval="True"/>
+            <field name="groups" eval="[(4, ref('group_fcom_sale_engineer'))]"/>
+            <field name="domain_force">[('ibas_order_type', '=', 'MRF'), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="access_rfq_orders_rule">
+            <field name="name">Engineer: Access RFQs</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="global" eval="True"/>
+            <field name="groups" eval="[(4, ref('group_fcom_purchase_engineer'))]"/>
+            <field name="domain_force">[('state', 'not in', ('done', 'purchase')), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <menuitem name="Purchase"
+            id="purchase.menu_purchase_root"
+            groups="purchase.group_purchase_manager,purchase.group_purchase_user,jt_fcom_sale_ext.group_fcom_purchase_engineer"
+            web_icon="purchase,static/description/icon.png"
+            sequence="25"/>
+
+        <menuitem action="purchase.purchase_form_action" id="purchase.menu_purchase_form_action" parent="purchase.menu_procurement_management" sequence="6" groups="purchase.group_purchase_user"/>
+
+        <menuitem id="sale.menu_sale_quotations"
+                action="sale.action_quotations_with_onboarding"
+                parent="sale.sale_order_menu"
+                sequence="1" groups="sales_team.group_sale_salesman,jt_fcom_sale_ext.group_fcom_sale_engineer"/>
+
+        <menuitem id="sale.menu_sale_order"
+            name="Orders"
+            action="sale.action_orders"
+            parent="sale.sale_order_menu"
+            sequence="2" groups="sales_team.group_sale_salesman,jt_fcom_sale_ext.group_fcom_sale_engineer"/>
+
+        <menuitem id="sale.menu_sale_invoicing"
+            name="To Invoice"
+            parent="sale.sale_menu_root"
+            sequence="3" groups="sales_team.group_sale_salesman,jt_fcom_sale_ext.group_fcom_sale_engineer"/>
+
+        <menuitem id="sale.res_partner_menu"
+            parent="sale.sale_order_menu"
+            action="account.res_partner_action_customer"
+            sequence="4" groups="sales_team.group_sale_salesman,jt_fcom_sale_ext.group_fcom_sale_engineer"/>
+
+        <menuitem id="sale.product_menu_catalog" name="Products" parent="sale.sale_menu_root" sequence="4" groups="sales_team.group_sale_salesman,jt_fcom_sale_ext.group_fcom_sale_engineer"/>
+
+        <menuitem id="sale.menu_aftersale" name="After-Sale"
+            groups="sales_team.group_sale_salesman,jt_fcom_sale_ext.group_fcom_sale_engineer"
+            parent="sale.sale_menu_root" sequence="5" />
+
+    </data>
+</odoo>

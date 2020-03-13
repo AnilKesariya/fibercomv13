@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_picking_inh_fcom" inherit_id="stock.report_picking">
+        <xpath expr="//div[@name='div_sched_date']" position="after">
+            <t t-if="o.backorder_id">
+                <div class="col-auto" name="div_backorder_of">
+                    <strong>Back Order Of:</strong>
+                    <p t-field="o.backorder_id"/>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

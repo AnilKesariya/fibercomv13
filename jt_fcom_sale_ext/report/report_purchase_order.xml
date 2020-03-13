@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-	<!-- <template id="report_delivey_custom" inherit_id="purchase.report_purchasequotation_document">
-	 	<xpath expr="//h2" position="replace">
-	 		<h2>Purchase Order <span t-field="o.name"/></h2>
-	 	</xpath>
-        <xpath expr="//table" position="after">
-            <div style="margin-top: 20px; width: 100%; text-align: center;">
-                <div style="width: 50%; float: left;">Prepared By: <br/><br/> <strong><span t-field="o.prepared_by"/></strong><br/><span t-field="o.prepared_by_designation"/></div>
-                <div style="width: 50%; float:right;">Received By: <br/><br/>______________________</div>
-                <div style="clear:both;"/>
-            </div>
-            <div style="margin-top: 20px; width: 100%; text-align: center;">
-                <div style="width: 50%; float:left;">Approved By: <br/><br/><strong><span t-field="o.approved_by"/></strong><br/><span t-field="o.approved_by_designation"/></div>
-                <div style="width: 50%; float:right;">Note By: <br/><br/>______________________</div>
-                <div style="clear:both;"/>
+    <template id="jt_inh_ibas_boxed" inherit_id="ibas_fibercom.ibas_boxed">
+        <xpath expr="//div[hasclass('o_boxed_footer')]" position="replace">
+            <div class="footer o_boxed_footer">
+                <div class="text-center">
+                    <p style="text-align: center;">
+                        <em>Unit 2006A, West Tower, Philippine Stock Exchange Centre,</em>
+                        <br />
+                        <em>Exchange Road, Ortigas Center, Pasig City</em>
+                        <br />
+                        <em>Tels.: (632) 657-1234 / 570-9668 / 635-0278 / 650-1302</em>
+                        <br />
+                        <em>Fax: (632) 637-6067</em>
+                        <br />
+                        <em>www.bamacomserv.com/ inquiry@bamacomserv.com</em>
+                    </p>
+                    <div t-field="company.report_footer"/>
+                    <div t-if="report_type == 'pdf'">
+                        Page: <span class="page"/> / <span class="topage"/>
+                    </div>
+                </div>
             </div>
         </xpath>
-	</template> -->
-
+    </template>
 
     <template id="ibas_fibercom.report_purchaseorder_subcon">
         <t t-call="ibas_fibercom.ibas_external_layout">
             <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
-           
             <div class="page">
                 <div class="oe_structure"/>
-
-
                 <div class="row">
                     <div class="col-6">
                         <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
@@ -35,39 +37,18 @@
                             <span t-field="o.partner_id.vat"/>
                         </p>
                     </div>
-
                     <div class="col-6">
                         <p t-field="o.date_order" style="text-align: right;" t-options='{"format": "dd, MMMM yyyy"}'/>
                     </div>
                 </div>
-                
                 <br/>
                 <br/>
-            
-
                 <h3 style="text-align: center;" t-if="o.state == 'draft'">Purchase Order #<span t-field="o.name"/></h3>
                 <h3 style="text-align: center;" t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h3>
                 <h3 style="text-align: center;" t-if="o.state in ['purchase', 'done']">Purchase Order #<span t-field="o.name"/></h3>
                 <h3 style="text-align: center;" t-if="o.state == 'cancel'">Cancelled Purchase Order #<span t-field="o.name"/></h3>
-
-                <!-- <div id="informations" class="row mt32 mb32">
-                    <div t-if="o.user_id" class="col-3 bm-2">
-                        <strong>Purchase Representative:</strong>
-                        <p t-field="o.user_id" class="m-0"/>
-                    </div>
-                    <div t-if="o.partner_ref" class="col-3 bm-2">
-                        <strong>Your Order Reference:</strong>
-                        <p t-field="o.partner_ref" class="m-0"/>
-                    </div>
-                    <div t-if="o.date_order" class="col-3 bm-2">
-                        <strong>Order Date:</strong>
-                        <p t-field="o.date_order" class="m-0"/>
-                    </div>
-                </div> -->
-
                 <br/>
                 <br/>
-
                 <table class="table table-sm o_main_table">
                     <thead>
                         <tr>
@@ -165,50 +146,54 @@
                 </div>
 
                 <p t-field="o.notes"/>
-
                 <br/><br/><br/>
-
-                            <table border="0" class="table table-sm o_main_table" style="width: 80%; border-collapse: collapse; border-style: none; margin-left: auto; margin-right: auto;">
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
-                                            <t t-if="o.prepared_by">
-                                            <p>Prepared By:</p>
-                                            <p>
-                                                <br />
-                                                <strong><span t-field="o.prepared_by"/></strong>
-                                                <br />
-                <span t-field="o.prepared_by_designation"/></p></t>
-                                        </td>
-                                        <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
-                                            <t t-if="o.approved_by">
-                                        <p></p>
-                                        <p>Approved By:</p>
-                                        <p>
-                                            <br />
-                                            <strong><span t-field="o.approved_by"/></strong>
-                                            <br />
-                <span t-field="o.approved_by_designation"/></p></t>
-                                    </td>
-                                </tr>
-                                <tr>
-                                     <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none"><t t-if="o.noted_by">Noted By:<br />
+                <table border="0" class="table table-sm o_main_table" style="width: 80%; border-collapse: collapse; border-style: none; margin-left: auto; margin-right: auto;">
+                    <tbody>
+                        <tr>
+                            <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                <t t-if="o.prepared_by">
+                                    <p>Prepared By:</p>
+                                    <p>
+                                        <br />
+                                        <strong><span t-field="o.prepared_by"/></strong>
+                                        <br />
+                                        <span t-field="o.prepared_by_designation"/>
+                                    </p>
+                                </t>
+                            </td>
+                            <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                <t t-if="o.approved_by">
+                                    <p></p>
+                                    <p>Approved By:</p>
+                                    <p>
+                                        <br />
+                                        <strong><span t-field="o.approved_by"/></strong>
+                                        <br />
+                                        <span t-field="o.approved_by_designation"/>
+                                    </p>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                <t t-if="o.noted_by">Noted By:<br />
                                     <br />
                                     <br />
-                                    <span t-field="o.noted_by"/></t></td>
-                                    <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
-                                        <p></p>
-                                        <p>Received By:</p>
-                                        <p>
-                                            <br />
-                                            <strong>___________________</strong>
-                                            <br />
-                                        </p>
-                                    </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
+                                    <span t-field="o.noted_by"/>
+                                </t>
+                            </td>
+                            <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none">
+                                <p></p>
+                                <p>Received By:</p>
+                                <p>
+                                    <br />
+                                    <strong>___________________</strong>
+                                    <br />
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="oe_structure"/>
             </div>
         </t>
@@ -218,11 +203,8 @@
     <template id="ibas_fibercom.report_purchaseorder_mats">
         <t t-call="ibas_fibercom.ibas_external_layout">
             <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
-           
             <div class="page">
                 <div class="oe_structure"/>
-
-
                 <div class="row">
                     <div class="col-6">
                         <div t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
@@ -231,15 +213,12 @@
                             <span t-field="o.partner_id.vat"/>
                         </p>
                     </div>
-
                     <div class="col-6">
                         <p t-field="o.date_order" style="text-align: right;" t-options='{"format": "dd, MMMM yyyy"}'/>
                     </div>
                 </div>
-                
                 <br/>
                 <br/>
-            
 
                 <h3 style="text-align: center;" t-if="o.state == 'draft'">Purchase Order #<span t-field="o.name"/></h3>
                 <h3 style="text-align: center;" t-if="o.state in ['sent', 'to approve']">Purchase Order #<span t-field="o.name"/></h3>
@@ -263,7 +242,6 @@
 
                 <br/>
                 <br/>
-
                 <table class="table table-sm o_main_table">
                     <thead>
                         <tr>
@@ -394,12 +372,17 @@
                                     <br />
                                     <span t-field="o.noted_by"/></t></td>
                                     <td style="width: 50%;border-right:none;border-left:none;border-bottom:none;border-top:none"><p></p>
-                                        <p>Received By:</p>
-                                        <p>
-                                            <br />
-                                            <strong>___________________</strong>
-                                            <br />
-                                        </p></td>
+                                        <t t-if="o.requested_by">
+                                            <p>Requested by:</p>
+                                            <p>
+                                                <br/>
+                                                <strong><span t-field="o.requested_by"/></strong>
+                                                <br />
+                                                <span t-field="o.requested_by_designation"/>
+                                            </p>
+                                        </t>
+                                    </td>
+                                    <p></p>
                             </tr>
                         </tbody>
                     </table>

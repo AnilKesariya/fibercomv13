@@ -8,11 +8,22 @@
 	        <field name="arch" type="xml">
 	        	<xpath expr="//field[@name='company_id']" position="after">
 	        		<field name="prepared_by"/>
-	        		<field name="prepared_by_designation"/> 
+	        		<field name="prepared_by_designation"/>
 	        		<field name="approved_by"/>
 	        		<field name="approved_by_designation"/>
-	        		<field name="noted_by"/>	
+	        		<field name="noted_by"/>
+                    <field name="requested_by"/>
+                    <field name="requested_by_designation"/>
 	        	</xpath>
+                <xpath expr="//header/button[@name='button_confirm'][1]" position="attributes">
+                    <attribute  name="groups">purchase.group_purchase_user</attribute>
+                </xpath>
+                <xpath expr="//header/button[@name='button_confirm'][2]" position="attributes">
+                    <attribute  name="groups">purchase.group_purchase_user</attribute>
+                </xpath>
+                <xpath expr="//header/button[@name='button_done']" position="attributes">
+                    <attribute  name="groups">purchase.group_purchase_user</attribute>
+                </xpath>
 	        </field>
 	    </record>
 	</data>

@@ -9,6 +9,7 @@
                 <field name="requested_by" attrs="{'invisible': [('ibas_order_type', '!=', 'MRF')]}"/>
 		        <field name="approved_by" attrs="{'invisible': [('ibas_order_type', '!=', 'MRF')]}"/>
                 <field name="is_admin"/>
+                <field name="group_engineer" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='analytic_account_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('is_admin', '=', False)]}</attribute>
@@ -19,17 +20,27 @@
         </field>
     </record>
 
-    <!-- <record id="stock_picking_form_view_inh_fcom" model="ir.ui.view">
-        <field name="name">stock.picking.inherit.form.view</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_form"/>
+
+    <record id="sale_order_form_view_ibas_fibercom" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inh</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="ibas_fibercom.ibas_sale_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='origin']" position="after">
-                <field name="project_code"/>
-                <field name="project_area"/>
-                <field name="requested_by"/>
-                <field name="approved_by"/>
+            <xpath expr="//field[@name='ibas_order_type']" position="replace">
+                <field name="group_engineer" invisible="1"/>
+                <field name="ibas_order_type" attrs="{'readonly': [('group_engineer', '=', True)]}" force_save="1"/>
             </xpath>
         </field>
-    </record> -->
+    </record>
+
+    <record id="stock_picking_form_view_inh_fcom" model="ir.ui.view">
+        <field name="name">stock.picking.inherit.form.view</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="ibas_fibercom.ibas_stock_picking_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='approved_by']" position="after">
+                <field name="issued_by"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
