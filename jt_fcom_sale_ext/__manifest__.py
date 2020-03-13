@@ -36,6 +36,7 @@
         'views/res_partner_view.xml',
         'views/sale_order_view.xml',
         'report/delivery_report.xml',
+        'report/report_picking_operation.xml',
         'views/purchase_order_view.xml',
         'report/report_purchase_order.xml',
     ],

@@ -95,6 +95,7 @@ class StockPicking(models.Model):
         related="sale_id.requested_by", string="Requested by")
     approved_by = fields.Char(
         related="sale_id.approved_by", string="Approved by")
+    issued_by = fields.Char(string='Issued By')
 
     @api.model
     def create(self, vals):

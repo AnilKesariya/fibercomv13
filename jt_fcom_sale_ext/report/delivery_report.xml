@@ -3,7 +3,8 @@
 	<template id="report_delivey_custom_delivery" inherit_id="stock.report_delivery_document">
 	 	<xpath expr="//table[@name='stock_move_line_table']" position="after">
 	 		<div class="pull-right">
-            <strong class="mr16"><span> Recevied by:______________________</span><br/>
+            <strong class="mr16"><t t-if="o.issued_by"> <span> Issued by: <u><t t-esc="o.issued_by"/></u></span><br/></t>
+                                <span> Recevied by:______________________</span><br/>
                                 <span> Date:______________________________</span>
             </strong>
             </div> 

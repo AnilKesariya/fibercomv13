@@ -33,17 +33,14 @@
         </field>
     </record>
 
-    <!-- <record id="stock_picking_form_view_inh_fcom" model="ir.ui.view">
+    <record id="stock_picking_form_view_inh_fcom" model="ir.ui.view">
         <field name="name">stock.picking.inherit.form.view</field>
         <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="inherit_id" ref="ibas_fibercom.ibas_stock_picking_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='origin']" position="after">
-                <field name="project_code"/>
-                <field name="project_area"/>
-                <field name="requested_by"/>
-                <field name="approved_by"/>
+            <xpath expr="//field[@name='approved_by']" position="after">
+                <field name="issued_by"/>
             </xpath>
         </field>
-    </record> -->
+    </record>
 </odoo>
