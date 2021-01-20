@@ -156,6 +156,15 @@ class IbasHrPayslip(models.Model):
                 res['line_ids'] = self.line_ids.filtered('total').ids
         return results
 
+    def action_payslip_done(self):
+        res = super(IbasHrPayslip, self).action_payslip_done()
+
+        for rec in self:
+            for line in rec.line_ids:
+                if line.code in ['SSSLOAN', 'HDMFLOAN', 'COMPANYLOAN', 'BAYAN', 'BAYANLOAN', 'PC', 'HC', 'CALLOAN', 'OTHERLOAN', 'DONATIONLOAN']:
+                    rec.employee_id.loan_ids._deduct_loan_amount(rec, line)
+        return res
+
 
 class HrPayslipWorkedDays(models.Model):
     _inherit = 'hr.payslip.worked_days'

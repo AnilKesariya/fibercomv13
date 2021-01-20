@@ -503,7 +503,7 @@ if inputs.INPADV:
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.is_deduct_sss_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('sss', payslip.date_from)</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('sss', payslip)</field>
             <field name="sequence" eval="700"/>
         </record>
 
@@ -517,7 +517,7 @@ if inputs.INPADV:
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.is_deduct_hdmf_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('hdmf', payslip.date_from)</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('hdmf', payslip)</field>
             <field name="sequence" eval="710"/>
         </record>
 
@@ -531,7 +531,7 @@ if inputs.INPADV:
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.is_deduct_company_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('company_loan', payslip.date_from)</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('company_loan', payslip)</field>
             <field name="sequence" eval="720"/>
         </record>
 
@@ -545,7 +545,7 @@ if inputs.INPADV:
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.is_deduct_other_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('other', payslip.date_from)</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('other', payslip)</field>
             <field name="sequence" eval="720"/>
         </record>
 
@@ -559,7 +559,7 @@ if inputs.INPADV:
             <field name="condition_select">python</field>
             <field name="condition_python">result = payslip.is_deduct_sss_loans</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('donation', payslip.date_from)</field>
+            <field name="amount_python_compute">result = employee.loan_ids._get_loan_amount('donation', payslip)</field>
             <field name="sequence" eval="720"/>
         </record>
         
