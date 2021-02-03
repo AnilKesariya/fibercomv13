@@ -17,6 +17,7 @@ class PayslipImport(models.TransientModel):
     file = fields.Binary('File', required=True)
     date_from = fields.Date(string='Date From', required=True, default=time.strftime('%Y-%m-01'))
     date_to = fields.Date(string='Date To', required=True, default=datetime.now())
+    struct_id = fields.Many2one('hr.payroll.structure', string='Structure', required=True)
 
     def get_data(self, keys, sheet):
         for i in range(1, sheet.nrows):
@@ -54,7 +55,7 @@ class PayslipImport(models.TransientModel):
                             'number_of_hours': value*8,
                             'contract_id': employee.contract_id.id
                         }))
-                    elif input_line_dict.get(key, False) in employee.contract_id.struct_id.input_line_type_ids.ids:
+                    elif input_line_dict.get(key, False) in self.struct_id.input_line_type_ids.ids:
                         other_input_entries.append((0, 0, {
                             'input_type_id': input_line_dict[key],
                             'amount': value or 0
@@ -65,7 +66,7 @@ class PayslipImport(models.TransientModel):
                     'worked_days_line_ids': worked_days_entries,
                     'input_line_ids': other_input_entries,
                     'contract_id': employee.contract_id.id,
-                    'struct_id': employee.contract_id.struct_id.id,
+                    'struct_id': self.struct_id.id,
                     'is_imported': True,
                     'date_to': self.date_to,
                     'date_from': self.date_from,
