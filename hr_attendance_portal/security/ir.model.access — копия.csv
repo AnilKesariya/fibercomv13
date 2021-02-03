@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_user,hr.employee user,hr.model_hr_employee,,1,1,1,0
+access_hr_employee_user,hr.employee user,hr_attendance.model_hr_attendance,,1,1,1,0
+access_hr_attendance_system_user_ip,hr.attendance.system.user.ip,hr_attendance_ip.model_hr_attendance_ip,,1,1,1,0
+access_hr_attendance_system_user_face,hr.attendance.system.user.face,hr_attendance_face_recognition.model_res_users_image,,1,1,1,0
+access_hr_attendance_system_user_token,hr.attendance.system.user.token,hr_attendance_token.model_hr_attendance_token,,1,1,1,0
+access_hr_attendance_system_user_emp,hr.attendance.system.user.token,hr.model_hr_employee_public,,1,1,1,0

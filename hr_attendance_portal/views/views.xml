@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="attendance_page_website" model="website.menu">
+        <field name="name">Attendance</field>
+        <field name="url">/hr_attendance_website</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">98</field>
+    </record>
+</data>
+</odoo>
