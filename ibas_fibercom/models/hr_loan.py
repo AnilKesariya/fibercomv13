@@ -78,7 +78,7 @@ class Loan(models.Model):
             'OTHERLOAN': 'other',
             'DONATIONLOAN': 'donation',
         }
-        loan = self.filtered(lambda r: r.state == 'open' and r.date_from >= payslip.date_from and r.date_to <= payslip.date_to and r.type == types[line.code])
+        loan = self.filtered(lambda r: r.state == 'open' and (r.date_from >= payslip.date_from or r.date_to <= payslip.date_to) and r.type == types[line.code])
         if loan:
             loan.write({'amount_total_deducted': loan.amount_total_deducted + line.total})
             loan._compute_state()
