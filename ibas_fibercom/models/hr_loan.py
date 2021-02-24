@@ -58,7 +58,8 @@ class Loan(models.Model):
 
     def _get_loan_amount(self, loan_type, payslip):
         loan_amount = 0.0
-        for rec in self.filtered(lambda r: r.state == 'open' and r.date_from >= payslip.date_from and r.date_to <= payslip.date_to and r.type == loan_type):
+        for rec in self.filtered(lambda r: r.state == 'open' and payslip.date_to >= r.date_from and \
+                                           payslip.date_to <= r.date_to and r.type == loan_type):
             if rec.amount_deduct > (rec.amount_total - rec.amount_total_deducted):
                 loan_amount += (rec.amount_total - rec.amount_total_deducted)
             else:
@@ -78,7 +79,10 @@ class Loan(models.Model):
             'OTHERLOAN': 'other',
             'DONATIONLOAN': 'donation',
         }
-        loan = self.filtered(lambda r: r.state == 'open' and (r.date_from >= payslip.date_from or r.date_to <= payslip.date_to) and r.type == types[line.code])
+        loan = self.filtered(lambda r: r.state == 'open' and payslip.date_to >= r.date_from and \
+                                           payslip.date_to <= r.date_to and r.type == types[line.code])
         if loan:
             loan.write({'amount_total_deducted': loan.amount_total_deducted + line.total})
+            if loan.amount_total_deducted > loan.amount_total:
+                loan.amount_total_deducted = loan.amount_total
             loan._compute_state()
