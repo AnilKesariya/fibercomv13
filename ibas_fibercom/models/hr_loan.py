@@ -28,6 +28,7 @@ class Loan(models.Model):
          ('calamity_loan', 'Pag-IBIG Calamity Loan'),
          ('other', 'Other'),
          ('donation', 'Donation')], string='Type')
+
     amount_total_deducted = fields.Monetary(string="Total Deducted Amount")
     state = fields.Selection([('draft', 'Draft'), ('open', 'In Progress'), ('done', 'Done')], string="Status",
                              default="draft", store=True)
@@ -59,7 +60,7 @@ class Loan(models.Model):
     def _get_loan_amount(self, loan_type, payslip):
         loan_amount = 0.0
         for rec in self.filtered(lambda r: r.state == 'open' and payslip.date_to >= r.date_from and \
-                                           payslip.date_to <= r.date_to and r.type == loan_type):
+                                           payslip.date_to <= r.date_to and r.x_studio_type_2 == loan_type):
             if rec.amount_deduct > (rec.amount_total - rec.amount_total_deducted):
                 loan_amount += (rec.amount_total - rec.amount_total_deducted)
             else:
@@ -78,9 +79,10 @@ class Loan(models.Model):
             'CALLOAN': 'calamity_loan',
             'OTHERLOAN': 'other',
             'DONATIONLOAN': 'donation',
+            'SSSCLOAN': 'sss_calamity_loan',
         }
         loan = self.filtered(lambda r: r.state == 'open' and payslip.date_to >= r.date_from and \
-                                           payslip.date_to <= r.date_to and r.type == types[line.code])
+                                           payslip.date_to <= r.date_to and r.x_studio_type_2 == types[line.code])
         if loan:
             loan.write({'amount_total_deducted': loan.amount_total_deducted + line.total})
             if loan.amount_total_deducted > loan.amount_total:
